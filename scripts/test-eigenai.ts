@@ -7,7 +7,7 @@ async function main() {
   const service = new EigenAIService({
     apiKey: process.env.EIGENAI_API_KEY!,
     baseUrl: process.env.EIGENAI_BASE_URL || 'https://app.eigenai.com/api/v1',
-    model: 'gpt-oss-120b',
+    model: 'gpt-oss',
     maxTokens: 500
   })
 

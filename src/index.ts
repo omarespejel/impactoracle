@@ -19,7 +19,7 @@ async function main() {
     eigenai: {
       apiKey: config.eigenaiApiKey,
       baseUrl: config.eigenaiBaseUrl,
-      model: 'gpt-oss-120b',  // EigenAI's model
+      model: 'gpt-oss',  // EigenAI's model
       maxTokens: 1000,
       signingSecret: config.eigenaiApiKey // Use API key as HMAC secret
     },
