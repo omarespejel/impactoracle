@@ -1,7 +1,8 @@
+import 'dotenv/config'  // Load environment variables first
 import { serve } from '@hono/node-server'
 import { createApp } from './app'
 import { createServices } from './services/factory'
-import { loadConfig, resetConfig } from './lib/config'
+import { loadConfig } from './lib/config'
 import { logger } from './lib/logger'
 
 async function main() {
@@ -10,7 +11,7 @@ async function main() {
   
   logger.info({ 
     network: config.nodeEnv,
-    priceCents: config.priceCents
+    price: `$${(config.priceCents / 100).toFixed(2)}`
   }, 'Starting ImpactOracle API')
 
   // Initialize services
@@ -18,7 +19,7 @@ async function main() {
     eigenai: {
       apiKey: config.eigenaiApiKey,
       baseUrl: config.eigenaiBaseUrl,
-      model: 'eigenai-v1',
+      model: 'gpt-oss-120b',  // EigenAI's model
       maxTokens: 1000,
       signingSecret: config.eigenaiApiKey // Use API key as HMAC secret
     },
@@ -42,10 +43,9 @@ async function main() {
     fetch: app.fetch,
     port: config.port
   }, (info) => {
-    logger.info({ port: info.port }, 'Server started')
-    logger.info(`📚 API Docs: http://localhost:${info.port}/docs`)
-    logger.info(`🔍 OpenAPI: http://localhost:${info.port}/v1/openapi.json`)
+    logger.info(`🚀 Server: http://localhost:${info.port}`)
     logger.info(`❤️  Health: http://localhost:${info.port}/v1/health`)
+    logger.info(`📄 Verify: http://localhost:${info.port}/v1/verify`)
   })
 }
 
