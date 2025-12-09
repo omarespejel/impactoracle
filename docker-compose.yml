@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - PAY_TO_ADDRESS=${PAY_TO_ADDRESS}
+      - EIGENAI_API_KEY=${EIGENAI_API_KEY}
+      - EIGENAI_BASE_URL=${EIGENAI_BASE_URL:-https://api.eigencloud.xyz/v1}
+      - BASE_SEPOLIA_RPC_URL=${BASE_SEPOLIA_RPC_URL}
+      - PRICE_CENTS=${PRICE_CENTS:-5}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  # Redis for production rate limiting (optional)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  redis_data:
+
