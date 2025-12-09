@@ -1,11 +1,15 @@
 import { EigenAIService, EigenAIConfig } from './eigenai'
+import { PaymentService, FacilitatorClient } from './payment'
+import { X402Config } from '../types/x402'
 
 export interface ServiceConfig {
   eigenai: EigenAIConfig
+  x402: X402Config & { facilitator: FacilitatorClient }
 }
 
 export interface ServiceContainer {
   eigenai: EigenAIService
+  payment: PaymentService
 }
 
 /**
@@ -17,7 +21,8 @@ export function createServices(
   overrides?: Partial<ServiceContainer>
 ): ServiceContainer {
   return {
-    eigenai: overrides?.eigenai ?? new EigenAIService(config.eigenai)
+    eigenai: overrides?.eigenai ?? new EigenAIService(config.eigenai),
+    payment: overrides?.payment ?? new PaymentService(config.x402)
   }
 }
 

@@ -1,7 +1,12 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { createServices, ServiceContainer } from '../../src/services/factory'
 
 describe('ServiceContainer', () => {
+  const mockFacilitator = {
+    verify: vi.fn(),
+    settle: vi.fn()
+  }
+
   it('creates all services with config', () => {
     const services = createServices({
       eigenai: {
@@ -9,10 +14,18 @@ describe('ServiceContainer', () => {
         baseUrl: 'https://api.eigencloud.xyz/v1',
         model: 'eigenai-v1',
         maxTokens: 1000
+      },
+      x402: {
+        payTo: '0x' + 'a'.repeat(40),
+        network: 'base-sepolia',
+        priceCents: 5,
+        facilitator: mockFacilitator as any
       }
     })
     expect(services.eigenai).toBeDefined()
+    expect(services.payment).toBeDefined()
     expect(typeof services.eigenai.generateImpactReport).toBe('function')
+    expect(typeof services.payment.verifyPayment).toBe('function')
   })
 
   it('supports mock injection for testing', () => {
@@ -24,10 +37,25 @@ describe('ServiceContainer', () => {
       }),
       healthCheck: async () => ({ healthy: true })
     }
+
+    const mockPayment = {
+      verifyPayment: vi.fn(),
+      settlePayment: vi.fn(),
+      buildPaymentRequirements: vi.fn(),
+      getConfig: vi.fn()
+    }
+
     const services = createServices({
-      eigenai: { apiKey: '', baseUrl: '', model: '', maxTokens: 0 }
-    }, { eigenai: mockEigenai })
+      eigenai: { apiKey: '', baseUrl: '', model: '', maxTokens: 0 },
+      x402: {
+        payTo: '0x' + 'a'.repeat(40),
+        network: 'base-sepolia',
+        priceCents: 5,
+        facilitator: mockFacilitator as any
+      }
+    }, { eigenai: mockEigenai as any, payment: mockPayment as any })
     expect(services.eigenai).toBe(mockEigenai)
+    expect(services.payment).toBe(mockPayment)
   })
 })
 
