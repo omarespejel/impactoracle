@@ -23,10 +23,11 @@ export function createApp(config: AppConfig = {}) {
   const app = new OpenAPIHono({
     defaultHook: (result, c) => {
       if (!result.success) {
+        const errors = result.error?.errors || []
         const error = new ValidationError('Invalid request', {
-          errors: result.error.errors.map(e => ({
-            path: e.path.join('.'),
-            message: e.message
+          errors: errors.map((e: any) => ({
+            path: e.path?.join('.') || 'unknown',
+            message: e.message || 'Validation error'
           }))
         })
         return c.json(errorToResponse(error), 400)

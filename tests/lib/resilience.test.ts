@@ -71,11 +71,17 @@ describe('ResilientClient', () => {
       .mockRejectedValueOnce(new Error('fail'))
       .mockResolvedValue('recovered')
 
+    // First two calls should fail and open circuit
     await expect(client.execute(fn)).rejects.toThrow()
     await expect(client.execute(fn)).rejects.toThrow()
 
     // Wait for reset timeout (cockatiel handles this internally)
     await new Promise(resolve => setTimeout(resolve, 150))
+    
+    // After timeout, circuit should be half-open and allow retry
+    // The function now resolves, so this should succeed
+    const result = await client.execute(fn)
+    expect(result).toBe('recovered')
 
     // Should allow one probe request (circuit half-open)
     const result = await client.execute(fn)
