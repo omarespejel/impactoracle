@@ -37,6 +37,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
+    "lint": "echo 'Linting skipped - add biome or eslint'",
+    "lint:fix": "echo 'Linting skipped - add biome or eslint'",
     "docker:build": "docker build -t impactoracle .",
     "docker:run": "docker run -p 3000:3000 --env-file .env impactoracle",
     "docker:up": "docker-compose up -d",

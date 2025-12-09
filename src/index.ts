@@ -38,11 +38,9 @@ async function main() {
   const app = createApp({ services })
 
   // Start server
-  const port = parseInt(process.env.PORT || '3000', 10)
-  
   serve({
     fetch: app.fetch,
-    port
+    port: config.port
   }, (info) => {
     logger.info({ port: info.port }, 'Server started')
     logger.info(`📚 API Docs: http://localhost:${info.port}/docs`)

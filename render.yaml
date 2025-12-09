@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: impactoracle-api
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: bun install
+    startCommand: bun run src/index.ts
+    healthCheckPath: /v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: PAY_TO_ADDRESS
+        sync: false  # Set manually in dashboard
+      - key: EIGENAI_API_KEY
+        sync: false
+      - key: BASE_SEPOLIA_RPC_URL
+        sync: false
+      - key: EIGENAI_BASE_URL
+        value: https://app.eigenai.com/api/v1
+      - key: X402_FACILITATOR_URL
+        value: https://x402.coinbase.com/facilitator
+      - key: PRICE_CENTS
+        value: "5"
+

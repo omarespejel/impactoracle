@@ -14,10 +14,14 @@ export const ConfigSchema = z.object({
   eigenaiBaseUrl: z
     .string()
     .url()
-    .default('https://api.eigenai.xyz/v1'),
+    .default('https://app.eigenai.com/api/v1'),
   baseSepoliaRpcUrl: z
     .string()
     .regex(httpsUrlRegex, 'HTTPS required for RPC'),
+  x402FacilitatorUrl: z
+    .string()
+    .url()
+    .default('https://x402.coinbase.com/facilitator'),
   priceCents: z
     .number()
     .int()
@@ -26,7 +30,14 @@ export const ConfigSchema = z.object({
     .default(5),
   nodeEnv: z
     .enum(['development', 'test', 'production'])
-    .default('development')
+    .default('development'),
+  port: z
+    .number()
+    .int()
+    .default(3000),
+  logLevel: z
+    .enum(['debug', 'info', 'warn', 'error'])
+    .default('info')
 })
 
 export type Config = z.infer<typeof ConfigSchema>
@@ -42,10 +53,15 @@ export function loadConfig(): Config {
     eigenaiApiKey: process.env.EIGENAI_API_KEY,
     eigenaiBaseUrl: process.env.EIGENAI_BASE_URL,
     baseSepoliaRpcUrl: process.env.BASE_SEPOLIA_RPC_URL,
+    x402FacilitatorUrl: process.env.X402_FACILITATOR_URL,
     priceCents: process.env.PRICE_CENTS
       ? parseInt(process.env.PRICE_CENTS, 10)
       : undefined,
-    nodeEnv: process.env.NODE_ENV
+    nodeEnv: process.env.NODE_ENV,
+    port: process.env.PORT
+      ? parseInt(process.env.PORT, 10)
+      : undefined,
+    logLevel: process.env.LOG_LEVEL
   })
 
   if (!result.success) {
@@ -57,8 +73,11 @@ export function loadConfig(): Config {
         eigenaiApiKey: 'EIGENAI_API_KEY',
         eigenaiBaseUrl: 'EIGENAI_BASE_URL',
         baseSepoliaRpcUrl: 'BASE_SEPOLIA_RPC_URL',
+        x402FacilitatorUrl: 'X402_FACILITATOR_URL',
         priceCents: 'PRICE_CENTS',
-        nodeEnv: 'NODE_ENV'
+        nodeEnv: 'NODE_ENV',
+        port: 'PORT',
+        logLevel: 'LOG_LEVEL'
       }
       const envVar = envVarMap[path] || path
       return `${envVar}: ${e.message}`
