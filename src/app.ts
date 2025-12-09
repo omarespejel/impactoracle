@@ -257,17 +257,88 @@ export function createApp(config: AppConfig = {}) {
     ]
   })
 
-  // Scalar API reference
+  // Scalar API reference - Enhanced aesthetic configuration
   app.get('/docs', Scalar({
     url: '/v1/openapi.json',
-    pageTitle: 'ImpactOracle API Docs',
-    theme: 'purple',
+    pageTitle: 'ImpactOracle API',
+    theme: {
+      color: {
+        accent: '#8B5CF6', // Purple accent
+        background: '#0F172A', // Dark slate background
+        border: '#1E293B',
+        text: '#F1F5F9',
+        textSecondary: '#94A3B8'
+      }
+    },
     layout: 'modern',
     darkMode: true,
+    hideDownloadButton: false,
+    hideModels: false,
+    hideSidebar: false,
+    hideSearch: false,
+    hideThemeToggle: false,
     metaData: {
-      title: 'ImpactOracle API',
-      description: 'Pay-per-call impact verification for charitable donations'
-    }
+      title: 'ImpactOracle API - Verifiable Impact Verification',
+      description: 'Pay-per-call impact verification API for charitable donations. Powered by EigenAI with cryptographic proofs.',
+      ogImage: 'https://github.com/omarespejel/impactoracle/raw/main/.github/og-image.png',
+      favicon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔮</text></svg>'
+    },
+    searchHotKey: 'k',
+    showSidebar: true,
+    sidebarOpen: true,
+    customCss: `
+      :root {
+        --scalar-color-1: #8B5CF6;
+        --scalar-color-2: #A78BFA;
+        --scalar-color-3: #C4B5FD;
+        --scalar-color-accent: #8B5CF6;
+        --scalar-sidebar-background-1: #0F172A;
+        --scalar-sidebar-item-hover-color: #1E293B;
+        --scalar-button-1: #8B5CF6;
+        --scalar-button-1-hover: #7C3AED;
+        --scalar-button-1-color: #FFFFFF;
+      }
+      .scalar-app {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+      }
+      .scalar-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .scalar-sidebar {
+        background: #0F172A;
+        border-right: 1px solid #1E293B;
+      }
+      .scalar-content {
+        background: #0F172A;
+      }
+      .scalar-card {
+        background: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .scalar-button {
+        border-radius: 6px;
+        transition: all 0.2s ease;
+      }
+      .scalar-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      }
+      .scalar-code {
+        background: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 6px;
+      }
+      .scalar-tag {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 4px;
+        padding: 2px 8px;
+        font-weight: 500;
+      }
+    `
   }))
 
   // Root redirect to docs
