@@ -1,6 +1,25 @@
-# Impact Verification Oracle
+# impactoracle
 
-A TypeScript-based oracle service that verifies impact reports for donation transactions using EigenAI and blockchain data, protected by x402 payment middleware.
+> 🔮 Pay-per-call impact verification for charitable donations
+
+[![x402](https://img.shields.io/badge/protocol-x402-blue)](https://x402.org)
+[![Base](https://img.shields.io/badge/chain-Base-0052FF)](https://base.org)
+[![EigenAI](https://img.shields.io/badge/AI-EigenAI-purple)](https://www.eigenai.com)
+
+**impactoracle** is an API that verifies humanitarian impact from blockchain donations using verifiable AI inference. Pay $0.05 via x402, get a cryptographically attested impact report.
+
+## Why?
+
+- **$530B** donated to charity annually — no API to verify impact
+- **GiveWell** does manual research — we automate it at $0.05/call
+- **AI hallucinations** plague charity reports — EigenAI provides cryptographic proofs
+
+## Stack
+
+- **x402** — HTTP 402 payment protocol (Coinbase)
+- **EigenAI** — Verifiable AI inference (Eigen Labs)
+- **Base** — L2 settlement (Coinbase)
+- **Hono + Bun** — Edge-native runtime
 
 ## Features
 
@@ -9,6 +28,7 @@ A TypeScript-based oracle service that verifies impact reports for donation tran
 - **Blockchain Integration**: Fetches donation events from Base Sepolia using viem
 - **Type-Safe**: Full TypeScript with Zod validation
 - **Test-Driven**: Comprehensive test suite with Vitest
+- **Production-Grade**: Circuit breaker, retry logic, request signing, audit trails
 
 ## Project Structure
 
@@ -21,13 +41,18 @@ impact-oracle/
 │   │   └── impact.ts       # Zod schemas
 │   ├── services/
 │   │   ├── eigenai.ts      # AI integration
-│   │   └── chain.ts        # Blockchain reads
+│   │   ├── chain.ts        # Blockchain reads
+│   │   └── factory.ts      # Dependency injection
 │   ├── middleware/
 │   │   └── x402.ts         # Payment gate
 │   ├── routes/
 │   │   └── verify.ts       # Main endpoint
 │   └── lib/
-│       └── logger.ts        # Pino logger
+│       ├── config.ts       # Secure config
+│       ├── logger.ts       # Audit trail
+│       ├── errors.ts       # Error handling
+│       ├── resilience.ts   # Circuit breaker
+│       └── signing.ts      # Request signing
 ├── tests/                  # Mirror src/ structure
 ├── vitest.config.ts
 ├── tsconfig.json
@@ -52,10 +77,10 @@ PORT=3000
 
 # Payment Configuration (x402)
 PAYMENT_PRICE=$0.05
-PAY_TO=0x0000000000000000000000000000000000000000
+PAY_TO_ADDRESS=0x0000000000000000000000000000000000000000
 
 # Blockchain Configuration
-BASE_SEPOLIA_RPC=https://sepolia.base.org
+BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
 
 # EigenAI Configuration
 EIGENAI_API_KEY=your_eigenai_api_key_here
@@ -171,9 +196,9 @@ Run tests after each phase to ensure everything works:
 
 ```bash
 bun test tests/types          # Phase 1
-bun test tests/services        # Phase 2 & 5
-bun test tests/middleware      # Phase 3
-bun test tests/routes          # Phase 4
+bun test tests/services      # Phase 2 & 5
+bun test tests/middleware    # Phase 3
+bun test tests/routes        # Phase 4
 ```
 
 ## Technologies
@@ -184,7 +209,39 @@ bun test tests/routes          # Phase 4
 - **viem**: Type-safe Ethereum interactions
 - **Vitest**: Testing framework
 - **Pino**: Fast logger
+- **cockatiel**: Circuit breaker and retry patterns
+- **@noble/hashes**: Cryptographic primitives
+
+## Hackathon Submission
+
+This project is a submission for the **x402 Hackathon 2025**.
+
+### What We Built
+
+A production-grade impact verification oracle that:
+- Accepts x402 micropayments ($0.05 per verification)
+- Uses EigenAI for verifiable AI inference
+- Provides cryptographic proofs for impact reports
+- Runs on Base Sepolia (ready for mainnet)
+
+### Key Innovations
+
+1. **Pay-per-call API**: First impact verification API with x402 integration
+2. **Verifiable AI**: Uses EigenAI's cryptographic proofs to prevent hallucinations
+3. **Production-ready**: Circuit breakers, retry logic, audit trails, error handling
 
 ## License
 
 MIT
+
+## Contributing
+
+This is a hackathon project. Contributions welcome!
+
+## Related Links
+
+- [x402 Protocol](https://x402.org)
+- [EigenAI](https://www.eigenai.com)
+- [Base Network](https://base.org)
+- [Hono Framework](https://hono.dev)
+- [Bun Runtime](https://bun.sh)
