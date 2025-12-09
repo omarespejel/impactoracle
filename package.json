@@ -36,6 +36,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:eigenai": "bun run scripts/test-eigenai.ts",
+    "test:verify": "bun run scripts/test-verify.ts",
     "typecheck": "tsc --noEmit",
     "lint": "echo 'Linting skipped - add biome or eslint'",
     "lint:fix": "echo 'Linting skipped - add biome or eslint'",
